@@ -15,17 +15,17 @@ async function buildCSS() {
 }
 
 /* Fix for "Eloquent" styles */
-:has([href*="clientscript/vbulletin_css/style00045"]) .above_body,
-:has([href*="clientscript/vbulletin_css/style00046"]) .above_body,
-:has([href*="clientscript/vbulletin_css/style00047"]) .above_body,
-:has([href*="clientscript/vbulletin_css/style00048"]) .above_body {
+html:has([href*="clientscript/vbulletin_css/style00045"]) .above_body,
+html:has([href*="clientscript/vbulletin_css/style00046"]) .above_body,
+html:has([href*="clientscript/vbulletin_css/style00047"]) .above_body,
+html:has([href*="clientscript/vbulletin_css/style00048"]) .above_body {
   background-image: inherit !IMPORTANT;
   border-radius: 0 !IMPORTANT;
 }
-:has([href*="clientscript/vbulletin_css/style00045"]) body,
-:has([href*="clientscript/vbulletin_css/style00046"]) body,
-:has([href*="clientscript/vbulletin_css/style00047"]) body,
-:has([href*="clientscript/vbulletin_css/style00048"]) body {
+html:has([href*="clientscript/vbulletin_css/style00045"]) body,
+html:has([href*="clientscript/vbulletin_css/style00046"]) body,
+html:has([href*="clientscript/vbulletin_css/style00047"]) body,
+html:has([href*="clientscript/vbulletin_css/style00048"]) body {
   background-image: inherit;
   background-size: 0;
 }
@@ -42,6 +42,10 @@ html:has([href*="clientscript/vbulletin_css/style00048"]) {
   display: block;
   height: ${headerHeight}px;
   margin-top: -${headerHeight}px;
+}
+html:has([href*="clientscript/vbulletin_css/style00068"]) :target::before {
+  height: ${headerHeight + 60}px;
+  margin-top: -${headerHeight + 60}px;
 }`;
   }
 
@@ -50,6 +54,9 @@ html:has([href*="clientscript/vbulletin_css/style00048"]) {
 /* Compact header */
 .logo-image > img {
   height: 47px;
+}
+.logo-image {
+  padding: 0 !IMPORTANT;
 }
 
 /* Fix for most alternate styles */
@@ -87,8 +94,14 @@ img.bbImage {
 
   if (storage.fixStyleBugs) {
     css += `
+/* Fix for Retro style */
 .toplinks, .toplinks ul.isuser li {
   background: unset !IMPORTANT;
+}
+
+/* Fix for snowflakes on the Weihnachten 2022 style */
+html:has([href*="clientscript/vbulletin_css/style00068"]) .js-anim-snowflake {
+  z-index: 20000;
 }`;
   }
 
