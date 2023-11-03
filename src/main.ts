@@ -1,10 +1,10 @@
-import "vuetify/styles";
-import "./assets/global.css";
+import { createPinia } from "pinia";
 import { createApp } from "vue";
 import { createVuetify } from "vuetify";
-import { createPinia } from "pinia";
 import { aliases, mdi } from "vuetify/iconsets/mdi-svg";
+import "vuetify/styles";
 import App from "./App.vue";
+import "./assets/global.css";
 
 const app = createApp(App);
 
@@ -21,9 +21,9 @@ const vuetify = createVuetify({
       light: {
         dark: false,
         colors: {
-          primary: "#185886",
-          secondary: "#0f3652",
-          accent: "#bcdef5",
+          primary: "#8BA6B8",
+          secondary: "#2f4456",
+          accent: "#f2f6f8",
         },
       },
     },

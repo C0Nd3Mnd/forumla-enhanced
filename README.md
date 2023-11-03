@@ -1,5 +1,5 @@
-# Oyle Enhanced
+# Forumla Enhanced
 
-Inoffizielles Browser Add-On für [oyle-community.de](https://oyle-community.de).
+Inoffizielles Browser Add-On für [forumla.de](https://forumla.de).
 
 ![Screenshot](./screenshot.png)

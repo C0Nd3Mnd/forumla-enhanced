@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useAddonStore } from "../stores/addon";
+import FeatureToggle from "./FeatureToggle.vue";
 
 const addonStore = useAddonStore();
 
@@ -30,15 +31,13 @@ const postImageHeightLimitOptions = [
 <template>
   <v-list select-strategy="independent" density="compact">
     <v-list-subheader>Posts</v-list-subheader>
-    <v-list-item>
-      <v-select
-        :items="postImageHeightLimitOptions"
-        label="Maximale Höhe von Bildern"
-        :model-value="addonStore.storage.postImageHeightLimit"
-        hide-details
-        @update:modelValue="addonStore.setItem('postImageHeightLimit', $event)"
-      />
-    </v-list-item>
+    <FeatureToggle
+      prop="relativeTimestamps"
+      title="Relative Zeitstempel"
+      subtitle='Zeigt Zeitstempel bei Posts relativ ("vor 10 Minuten") statt absolut an'
+      lines="two"
+    />
+    <v-list-subheader>Signaturen</v-list-subheader>
     <FeatureToggle
       prop="hideSignatureImages"
       title="Signaturbilder ausblenden"

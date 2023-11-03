@@ -30,7 +30,7 @@ const limitPageWidthOptions = [
 
 <template>
   <v-list select-strategy="independent" density="compact">
-    <v-list-subheader>Layout</v-list-subheader>
+    <v-list-subheader>Seite</v-list-subheader>
     <v-list-item>
       <v-select
         :items="limitPageWidthOptions"
@@ -40,12 +40,18 @@ const limitPageWidthOptions = [
         @update:modelValue="addonStore.setItem('limitPageWidth', $event)"
       />
     </v-list-item>
-    <v-list-subheader>Navigation</v-list-subheader>
+    <v-list-subheader>Header</v-list-subheader>
     <FeatureToggle
-      prop="fixedNavigationIcons"
-      title="Breite der Icons gleichsetzen"
-      subtitle="Setzt die Breite aller Icons auf den gleichen Wert, um gleichmäßige Abstände zu erzeugen."
-      lines="three"
+      prop="stickyHeader"
+      title="Header anheften"
+      subtitle="Heftet den Header oben an, sodass dieser mitscrollt."
+      lines="two"
+    />
+    <FeatureToggle
+      prop="compactHeader"
+      title="Kompakter Header"
+      subtitle="Verringert die Höhe des Headers."
+      lines="two"
     />
   </v-list>
 </template>

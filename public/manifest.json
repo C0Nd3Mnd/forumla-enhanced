@@ -1,13 +1,13 @@
 {
-  "name": "Oyle Enhanced",
-  "description": "Inoffizielles Add-On für oyle-community.de",
+  "name": "Forumla Enhanced",
+  "description": "Inoffizielles Add-On für forumla.de",
   "version": "will be replaced by postbuild script",
   "manifest_version": 3,
   "background": {
     "service_worker": "background.js"
   },
   "permissions": ["storage", "scripting"],
-  "host_permissions": ["*://*.oyle-community.de/*"],
+  "host_permissions": ["*://*.forumla.de/*"],
   "action": {
     "default_popup": "index.html"
   },
