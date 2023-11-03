@@ -1,11 +1,42 @@
 <script setup lang="ts">
-import { mdiCheck } from "@mdi/js";
+import { mdiCheck, mdiClose } from "@mdi/js";
 import { version } from "../../package.json";
 import { useAddonStore } from "../stores/addon";
 
 const addonStore = useAddonStore();
 
-const supportedStyles = ["Forumla 4.2", "Forumla 4.2 Retro"];
+const supportedStyles = [
+  {
+    title: "Forumla 4.2",
+    subtitle: "",
+    icon: mdiCheck,
+  },
+  {
+    title: "Weihnachten 2022",
+    subtitle: "Headergröße inkorrekt",
+    icon: mdiClose,
+  },
+  {
+    title: "Forumla 4.2 Retro",
+    subtitle: "inkl. Style-Fixes",
+    icon: mdiCheck,
+  },
+  {
+    title: "Forumla-Grey 4.1.12",
+    subtitle: "Varianten ebenfalls unterstützt",
+    icon: mdiCheck,
+  },
+  {
+    title: "Forumla-Eloquent 4.1.12",
+    subtitle: "Varianten ebenfalls unterstützt",
+    icon: mdiCheck,
+  },
+  {
+    title: "Forumla-Seamus 4.1.12",
+    subtitle: "Header-Leiste zu breit/Hintergrundbild",
+    icon: mdiClose,
+  },
+];
 
 const debugInfo = JSON.stringify(
   {
@@ -14,7 +45,7 @@ const debugInfo = JSON.stringify(
     storage: addonStore.storage,
   },
   null,
-  2
+  2,
 );
 </script>
 
@@ -23,10 +54,11 @@ const debugInfo = JSON.stringify(
     <v-list-subheader>Unterstützte Styles</v-list-subheader>
     <v-list-item
       v-for="supportedStyle in supportedStyles"
-      :key="supportedStyle"
-      :prepend-icon="mdiCheck"
+      :key="supportedStyle.title"
+      :prepend-icon="supportedStyle.icon"
     >
-      <v-list-item-title>{{ supportedStyle }}</v-list-item-title>
+      <v-list-item-title>{{ supportedStyle.title }}</v-list-item-title>
+      <v-list-item-subtitle>{{ supportedStyle.subtitle }}</v-list-item-subtitle>
     </v-list-item>
     <v-list-subheader>Debug-Informationen</v-list-subheader>
     <v-list-item>

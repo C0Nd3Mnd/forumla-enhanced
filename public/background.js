@@ -14,6 +14,28 @@ async function buildCSS() {
   z-index: 1;
 }
 
+/* Fix for "Eloquent" styles */
+:has([href*="clientscript/vbulletin_css/style00045"]) .above_body,
+:has([href*="clientscript/vbulletin_css/style00046"]) .above_body,
+:has([href*="clientscript/vbulletin_css/style00047"]) .above_body,
+:has([href*="clientscript/vbulletin_css/style00048"]) .above_body {
+  background-image: inherit !IMPORTANT;
+  border-radius: 0 !IMPORTANT;
+}
+:has([href*="clientscript/vbulletin_css/style00045"]) body,
+:has([href*="clientscript/vbulletin_css/style00046"]) body,
+:has([href*="clientscript/vbulletin_css/style00047"]) body,
+:has([href*="clientscript/vbulletin_css/style00048"]) body {
+  background-image: inherit;
+  background-size: 0;
+}
+html:has([href*="clientscript/vbulletin_css/style00045"]),
+html:has([href*="clientscript/vbulletin_css/style00046"]),
+html:has([href*="clientscript/vbulletin_css/style00047"]),
+html:has([href*="clientscript/vbulletin_css/style00048"]) {
+  background-attachment: fixed !IMPORTANT;
+}
+
 /* Scroll target fix when using sticky header */
 :target::before {
   content: "";
@@ -25,8 +47,14 @@ async function buildCSS() {
 
   if (storage.compactHeader) {
     css += `
+/* Compact header */
 .logo-image > img {
   height: 47px;
+}
+
+/* Fix for most alternate styles */
+#header {
+  height: unset !IMPORTANT;
 }`;
   }
 
@@ -42,9 +70,10 @@ img.bbImage {
   if (storage.limitPageWidth) {
     css += `
 /* Max width */
-#content_wrapper {
+#content_wrapper, .above_body, .body_wrapper {
   max-width: ${storage.limitPageWidth};
   margin: 0 auto !IMPORTANT;
+  box-sizing: border-box;
 }`;
   }
 
@@ -87,7 +116,7 @@ chrome.runtime.onInstalled.addListener(async () => {
   // Remove existing keys that are no longer in use.
   const factoryKeys = Object.keys(factory);
   const obsoleteKeys = Object.keys(existing).filter(
-    (x) => !factoryKeys.includes(x)
+    (x) => !factoryKeys.includes(x),
   );
   chrome.storage.sync.remove(obsoleteKeys);
 });
@@ -111,13 +140,15 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
     },
     () => {
       console.log(`Injected CSS into tab ${tabId}.`, changeInfo, tab);
-    }
+    },
   );
 
   chrome.scripting.executeScript({
     args: [await chrome.storage.sync.get()],
+    target: { tabId },
+    injectImmediately: true,
+    world: "MAIN",
     func: function (storage) {
-      console.log(storage);
       (function () {
         // We want to prevent custom scroll logic to stop weird page jumping
         // behaviour with a fixed header (and otherwise).
@@ -237,14 +268,14 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
         if (storage.confirmSubscriptionDeletion) {
           document.addEventListener("DOMContentLoaded", () => {
             const unsubscribeLinks = document.querySelectorAll(
-              "#new_subscribed_threads > ol > li .author a"
+              "#new_subscribed_threads > ol > li .author a",
             );
 
             for (let link of unsubscribeLinks) {
               if (link.innerText === "Abonnement löschen") {
                 link.addEventListener("click", (e) => {
                   const result = confirm(
-                    "Soll das Abonnement zu diesem Thema wirklich gelöscht werden?"
+                    "Soll das Abonnement zu diesem Thema wirklich gelöscht werden?",
                   );
 
                   if (!result) {
@@ -257,8 +288,5 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
         }
       })();
     },
-    target: { tabId },
-    injectImmediately: true,
-    world: "MAIN",
   });
 });
