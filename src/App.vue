@@ -75,7 +75,7 @@ const tabs = [
 
 const activeTab = ref("layout");
 const activeTabTitle = computed(
-  () => tabs.find((tab) => tab.name === activeTab.value)?.label
+  () => tabs.find((tab) => tab.name === activeTab.value)?.label,
 );
 </script>
 
@@ -120,7 +120,7 @@ const activeTabTitle = computed(
         </v-window-item>
       </v-window>
       <v-footer app class="pa-0">
-        <div class="px-4 py-2 bg-secondary w-100 d-flex">
+        <div class="px-4 py-2 bg-secondary w-100 d-flex justify-space-between">
           <span>
             Version {{ version }}, erstellt von
             <a
@@ -131,7 +131,6 @@ const activeTabTitle = computed(
               medeman
             </a>
           </span>
-          <v-spacer />
           <a
             href="https://github.com/C0Nd3Mnd/forumla-enhanced"
             title="GitHub"
