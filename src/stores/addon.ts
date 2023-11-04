@@ -4,10 +4,6 @@ import { ref } from "vue";
 export const useAddonStore = defineStore("addon", () => {
   const storage = ref<{ [key: string]: any }>({});
 
-  chrome.storage.sync.get().then((items) => {
-    console.log("CHRSTRG", items);
-  });
-
   chrome.storage.sync.get((items) => {
     storage.value = items;
   });
