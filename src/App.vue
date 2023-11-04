@@ -68,7 +68,7 @@ const tabs = [
   },
   {
     name: "information",
-    label: "Informationen",
+    label: "Über",
     icon: mdiInformation,
   },
 ];
@@ -93,18 +93,15 @@ const activeTabTitle = computed(
       </v-btn>
 
       <template #extension>
-        <v-tabs v-model="activeTab" grow density="compact">
+        <v-tabs v-model="activeTab" grow density="compact" centered stacked>
           <v-tab v-for="tab in tabs" :key="tab.name" :value="tab.name">
             <v-icon>{{ tab.icon }}</v-icon>
-            <v-tooltip activator="parent" location="bottom">
-              {{ tab.label }}
-            </v-tooltip>
+            <span class="text-caption">{{ tab.label }}</span>
           </v-tab>
         </v-tabs>
       </template>
     </v-app-bar>
     <v-main>
-      <h6 class="text-h6 px-4 pb-0 pt-2">{{ activeTabTitle }}</h6>
       <v-window v-model="activeTab">
         <v-window-item value="layout">
           <TabLayout />
