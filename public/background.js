@@ -1,11 +1,10 @@
 async function buildCSS() {
   const storage = await chrome.storage.sync.get();
+  const headerHeight = storage.compactHeader ? 120 : 167;
 
   let css = "";
 
   if (storage.stickyHeader) {
-    const headerHeight = storage.compactHeader ? 120 : 167;
-
     css += `
 /* Sticky header */
 .above_body {
@@ -42,10 +41,6 @@ html:has([href*="clientscript/vbulletin_css/style00048"]) {
   display: block;
   height: ${headerHeight}px;
   margin-top: -${headerHeight}px;
-}
-html:has([href*="clientscript/vbulletin_css/style00068"]) :target::before {
-  height: ${headerHeight + 60}px;
-  margin-top: -${headerHeight + 60}px;
 }`;
   }
 
@@ -62,6 +57,13 @@ html:has([href*="clientscript/vbulletin_css/style00068"]) :target::before {
 /* Fix for most alternate styles */
 #header {
   height: unset !IMPORTANT;
+}`;
+  } else {
+    css += `
+/* Alternate height for "Weihnachten 2022" style */
+html:has([href*="clientscript/vbulletin_css/style00068"]) :target::before {
+  height: ${headerHeight + 60}px;
+  margin-top: -${headerHeight + 60}px;
 }`;
   }
 

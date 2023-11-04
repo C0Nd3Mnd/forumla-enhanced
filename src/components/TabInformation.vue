@@ -13,8 +13,8 @@ const supportedStyles = [
   },
   {
     title: "Weihnachten 2022",
-    subtitle: "Headergröße inkorrekt",
-    icon: mdiClose,
+    subtitle: "inkl. Style-Fix für Schneeflocken",
+    icon: mdiCheck,
   },
   {
     title: "Forumla 4.2 Retro",
