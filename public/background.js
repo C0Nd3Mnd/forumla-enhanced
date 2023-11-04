@@ -137,6 +137,8 @@ chrome.runtime.onInstalled.addListener(async () => {
 });
 
 chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
+  console.log({ changeInfo, tab });
+
   if (!tab.url || changeInfo.status !== "loading") {
     return;
   }
@@ -146,6 +148,31 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
   if (url.hostname !== "www.forumla.de") {
     return;
   }
+
+  // Prevent duplicate injection.
+  try {
+    const alreadyInjected = await chrome.tabs.sendMessage(
+      tabId,
+      "FE_INJECTION_CHECK",
+    );
+
+    if (alreadyInjected) {
+      return;
+    }
+  } catch (ex) {
+    // No need to do anything here.
+  }
+
+  chrome.scripting.executeScript({
+    target: { tabId },
+    injectImmediately: true,
+    world: "ISOLATED",
+    func: function () {
+      chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+        sendResponse(true);
+      });
+    },
+  });
 
   chrome.scripting.insertCSS(
     {
