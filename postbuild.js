@@ -9,6 +9,8 @@ async function postbuild() {
 
   await fs.writeFile("dist/manifest.json", JSON.stringify(manifest, null, 2));
 
+  // Firefox version below.
+
   manifest.background = {
     scripts: ["background.js"],
   };
@@ -22,6 +24,7 @@ async function postbuild() {
 
   try {
     await fs.rm("dist-firefox", { recursive: true });
+  } catch (ex) {
   } finally {
     await fs.mkdir("dist-firefox");
   }
