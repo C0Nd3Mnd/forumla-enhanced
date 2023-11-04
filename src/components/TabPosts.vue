@@ -37,6 +37,15 @@ const postImageHeightLimitOptions = [
       subtitle='Zeigt Zeitstempel bei Posts relativ ("vor 10 Minuten") statt absolut an'
       lines="two"
     />
+    <v-list-item>
+      <v-select
+        :items="postImageHeightLimitOptions"
+        label="Maximale Höhe von Bildern"
+        :model-value="addonStore.storage.postImageHeightLimit"
+        hide-details
+        @update:modelValue="addonStore.setItem('postImageHeightLimit', $event)"
+      />
+    </v-list-item>
     <v-list-subheader>Signaturen</v-list-subheader>
     <FeatureToggle
       prop="hideSignatureImages"

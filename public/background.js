@@ -70,7 +70,7 @@ html:has([href*="clientscript/vbulletin_css/style00068"]) :target::before {
   if (storage.postImageHeightLimit) {
     css += `
 /* Max height for images embedded in posts */
-img.bbImage {
+.postcontent img {
   max-height: ${storage.postImageHeightLimit};
   width: auto;
 }`;
@@ -119,7 +119,7 @@ chrome.runtime.onInstalled.addListener(async () => {
     relativeTimestamps: false,
     confirmSubscriptionDeletion: false,
     fixStyleBugs: false,
-    // postImageHeightLimit: false,
+    postImageHeightLimit: false,
     hideSignatureImages: false,
   };
 
