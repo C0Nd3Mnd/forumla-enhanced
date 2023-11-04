@@ -189,7 +189,7 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
     args: [await chrome.storage.sync.get()],
     target: { tabId },
     injectImmediately: true,
-    world: "MAIN",
+    world: "ISOLATED",
     func: function (storage) {
       (function () {
         // We want to prevent custom scroll logic to stop weird page jumping
