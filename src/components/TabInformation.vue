@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { mdiCheck, mdiClose } from "@mdi/js";
+import { mdiCheck, mdiClose, mdiContentCopy } from "@mdi/js";
+import { computed } from "vue";
 import { version } from "../../package.json";
 import { useAddonStore } from "../stores/addon";
 
@@ -38,15 +39,27 @@ const supportedStyles = [
   },
 ];
 
-const debugInfo = JSON.stringify(
-  {
-    userAgent: navigator.userAgent,
-    version,
-    storage: addonStore.storage,
-  },
-  null,
-  2,
+const debugInfo = computed(() =>
+  JSON.stringify(
+    {
+      userAgent: navigator.userAgent,
+      version,
+      storage: addonStore.storage,
+    },
+    null,
+    2,
+  ),
 );
+
+function copyDebugInfo() {
+  const blob = new Blob([debugInfo.value], { type: "text/plain" });
+
+  navigator.clipboard.write([
+    new ClipboardItem({
+      "text/plain": blob,
+    }),
+  ]);
+}
 </script>
 
 <template>
@@ -60,9 +73,10 @@ const debugInfo = JSON.stringify(
       <v-list-item-title>{{ supportedStyle.title }}</v-list-item-title>
       <v-list-item-subtitle>{{ supportedStyle.subtitle }}</v-list-item-subtitle>
     </v-list-item>
-    <v-list-subheader>Debug-Informationen</v-list-subheader>
-    <v-list-item>
-      <v-textarea readonly style="font-family: monospace" :value="debugInfo" />
+    <v-list-subheader>Debugging</v-list-subheader>
+    <v-list-item :prepend-icon="mdiContentCopy" @click="copyDebugInfo">
+      <v-list-item-title>Debug-Informationen kopieren</v-list-item-title>
+      <!-- <v-textarea readonly style="font-family: monospace" :value="debugInfo" /> -->
     </v-list-item>
   </v-list>
 </template>
