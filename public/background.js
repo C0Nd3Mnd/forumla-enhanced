@@ -137,8 +137,6 @@ chrome.runtime.onInstalled.addListener(async () => {
 });
 
 chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
-  console.log({ changeInfo, tab });
-
   if (!tab.url || changeInfo.status !== "loading") {
     return;
   }
@@ -169,7 +167,9 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
     world: "ISOLATED",
     func: function () {
       chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-        sendResponse(true);
+        if (request === "FE_INJECTION_CHECK") {
+          sendResponse(true);
+        }
       });
     },
   });
