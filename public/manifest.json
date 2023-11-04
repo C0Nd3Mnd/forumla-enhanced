@@ -4,9 +4,9 @@
   "version": "will be replaced by postbuild script",
   "manifest_version": 3,
   "background": {
-    "scripts": ["background.js"]
+    "service_worker": "background.js"
   },
-  "permissions": ["storage", "scripting", "activeTab", "tabs"],
+  "permissions": ["storage", "scripting"],
   "host_permissions": ["*://*.forumla.de/*"],
   "action": {
     "default_popup": "index.html"
@@ -16,10 +16,5 @@
     "32": "icons/32.png",
     "48": "icons/48.png",
     "128": "icons/128.png"
-  },
-  "browser_specific_settings": {
-    "gecko": {
-      "id": "forumlaenhanced@sleepingbird.dev"
-    }
   }
 }
