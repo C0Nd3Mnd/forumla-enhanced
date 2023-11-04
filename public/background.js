@@ -1,3 +1,9 @@
+const BROWSER_CHROME = "chrome";
+const BROWSER_FIREFOX = "firefox";
+
+const detectedBrowser =
+  typeof browser === "undefined" ? BROWSER_CHROME : BROWSER_FIREFOX;
+
 async function buildCSS() {
   const storage = await chrome.storage.sync.get();
   const headerHeight = storage.compactHeader ? 120 : 167;
@@ -189,7 +195,8 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
     args: [await chrome.storage.sync.get()],
     target: { tabId },
     injectImmediately: true,
-    world: "ISOLATED",
+    // Firefox doesn't support MAIN world.
+    world: detectedBrowser === BROWSER_FIREFOX ? "ISOLATED" : "MAIN",
     func: function (storage) {
       (function () {
         // We want to prevent custom scroll logic to stop weird page jumping
