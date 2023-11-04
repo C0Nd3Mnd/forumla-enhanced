@@ -137,9 +137,7 @@ chrome.runtime.onInstalled.addListener(async () => {
 });
 
 chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
-  console.log("TAB UPDATE", tab.url);
-
-  if (!tab.url || changeInfo.status !== "complete") {
+  if (!tab.url || changeInfo.status !== "loading") {
     return;
   }
 
