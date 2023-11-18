@@ -10,7 +10,7 @@ import {
 } from "@mdi/js";
 import { computed, ref } from "vue";
 import { version } from "../package.json";
-import logoWhite from "./assets/logo_white.png";
+import logoWhite from "./assets/logo_white.svg";
 import TabInformation from "./components/TabInformation.vue";
 import TabLayout from "./components/TabLayout.vue";
 import TabPosts from "./components/TabPosts.vue";
