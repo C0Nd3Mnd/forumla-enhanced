@@ -77,6 +77,8 @@ const activeTab = ref("layout");
 const activeTabTitle = computed(
   () => tabs.find((tab) => tab.name === activeTab.value)?.label,
 );
+
+const commitHash = __COMMIT_HASH__;
 </script>
 
 <template>
@@ -119,7 +121,7 @@ const activeTabTitle = computed(
       <v-footer app class="pa-0">
         <div class="px-4 py-2 bg-secondary w-100 d-flex justify-space-between">
           <span>
-            Version {{ version }}, erstellt von
+            Version {{ version }}-{{ commitHash }}, erstellt von
             <a
               href="https://www.forumla.de/u62855/medeman/"
               target="_blank"
