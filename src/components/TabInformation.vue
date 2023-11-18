@@ -19,7 +19,7 @@ const supportedStyles = [
   },
   {
     title: "Forumla 4.2 Retro",
-    subtitle: "inkl. Style-Fixes",
+    subtitle: "inkl. Style-Fix für Buttons im Header",
     icon: mdiCheck,
   },
   {
