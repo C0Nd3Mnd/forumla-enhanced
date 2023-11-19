@@ -4,33 +4,16 @@ import {
   mdiFileDocument,
   mdiGithub,
   mdiInformation,
-  mdiOwl,
   mdiReload,
   mdiWrench,
 } from "@mdi/js";
-import { computed, ref } from "vue";
+import { ref } from "vue";
 import { version } from "../package.json";
 import logoWhite from "./assets/logo_white.svg";
 import TabInformation from "./components/TabInformation.vue";
 import TabLayout from "./components/TabLayout.vue";
 import TabPosts from "./components/TabPosts.vue";
 import TabTweaks from "./components/TabTweaks.vue";
-import { useAddonStore } from "./stores/addon";
-
-const topicNavigationModeOptions = [
-  {
-    title: "Standard",
-    value: false,
-  },
-  {
-    title: "Einfach",
-    value: "simple",
-  },
-  {
-    title: "Erweitert",
-    value: "advanced",
-  },
-];
 
 async function reload() {
   const tabs = await chrome.tabs.query({
@@ -45,10 +28,6 @@ async function reload() {
     chrome.tabs.reload(tab.id);
   }
 }
-
-const easterEggIcon = ref(mdiOwl);
-
-const addonStore = useAddonStore();
 
 const tabs = [
   {
@@ -74,9 +53,6 @@ const tabs = [
 ];
 
 const activeTab = ref("layout");
-const activeTabTitle = computed(
-  () => tabs.find((tab) => tab.name === activeTab.value)?.label,
-);
 
 const commitHash = __COMMIT_HASH__;
 </script>
