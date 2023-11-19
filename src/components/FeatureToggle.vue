@@ -16,7 +16,10 @@ const props = defineProps({
   <v-list-item v-bind="$attrs" @click="addonStore.toggleItem(props.prop)">
     <template #prepend>
       <v-list-item-action start>
-        <v-checkbox-btn :model-value="addonStore.storage[props.prop]" />
+        <v-checkbox-btn
+          :model-value="addonStore.storage[props.prop]"
+          color="primary"
+        />
       </v-list-item-action>
     </template>
   </v-list-item>
