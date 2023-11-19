@@ -94,7 +94,7 @@ const commitHash = __COMMIT_HASH__;
           <TabInformation />
         </v-window-item>
       </v-window>
-      <v-footer app class="pa-0">
+      <v-footer app class="pa-0 text-caption">
         <div class="px-4 py-2 bg-secondary w-100 d-flex justify-space-between">
           <span>
             Version {{ version }}-{{ commitHash }}, erstellt von
