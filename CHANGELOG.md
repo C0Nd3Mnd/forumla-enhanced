@@ -1,5 +1,15 @@
 # Changelog
 
+## v2.0.2 (2023-11-19)
+
+* Berechtigung auf `*://*.forumla.de/*` wird erfragt, wenn der Zugriff nicht erlaubt ist
+* Popup-Stying nachgebessert
+  * Roboto Schriftart wird ordnungsgemäß eingebettet und verwendet
+  * Größe von einigen Elementen korrigiert (bspw. Checkboxen)
+  * Checkboxen werden in der Primärfarbe dargestellt
+  * Schriftstil im Footer angepasst
+* Ungenutzten Code entfernt
+
 ## v2.0.1 (2023-11-19)
 
 * Erstes Firefox-Release
