@@ -58,7 +58,7 @@ const commitHash = __COMMIT_HASH__;
 </script>
 
 <template>
-  <v-layout>
+  <v-app>
     <v-app-bar color="primary" density="compact">
       <v-app-bar-title>
         <img style="height: 38px; padding-top: 8px" :src="logoWhite" />
@@ -117,5 +117,5 @@ const commitHash = __COMMIT_HASH__;
         </div>
       </v-footer>
     </v-main>
-  </v-layout>
+  </v-app>
 </template>
