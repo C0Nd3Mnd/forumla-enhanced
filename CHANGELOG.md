@@ -1,5 +1,10 @@
 # Changelog
 
+## v2.0.1 (2023-11-19)
+
+* Erstes Firefox-Release
+  * Inhaltlich identisch zu Version 2.0.0, mit Ergänzungen aufgrund des Review-Prozesses von Firefox Add-Ons
+
 ## v2.0.0 (2023-11-18)
 
 * Vollständiges Rewrite der alten Version (0.3.0)
