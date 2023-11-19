@@ -7,7 +7,7 @@ import vuetify from "vite-plugin-vuetify";
 export default defineConfig({
   define: {
     __COMMIT_HASH__: JSON.stringify(
-      execSync("git rev-parse --short HEAD").toString(),
+      execSync("git rev-parse --short HEAD").toString().trim(),
     ),
   },
   plugins: [vue(), vuetify({ autoImport: true })],
