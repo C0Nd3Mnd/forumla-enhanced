@@ -18,7 +18,7 @@ async function postbuild() {
   manifest.permissions.push("activeTab", "tabs");
   manifest.browser_specific_settings = {
     gecko: {
-      id: "forumlaenhanced@sleepingbird.dev",
+      id: "{8abca5e8-b1fb-4314-a0fb-b2fece5325c7}",
     },
   };
 
