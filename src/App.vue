@@ -7,7 +7,7 @@ import {
   mdiReload,
   mdiWrench,
 } from "@mdi/js";
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import { version } from "../package.json";
 import logoWhite from "./assets/logo_white.svg";
 import TabInformation from "./components/TabInformation.vue";
@@ -55,6 +55,24 @@ const tabs = [
 const activeTab = ref("layout");
 
 const commitHash = __COMMIT_HASH__;
+
+const originPermissionGranted = ref(true);
+
+onMounted(async () => {
+  originPermissionGranted.value = await chrome.permissions.contains({
+    origins: ["*://*.forumla.de/*"],
+  });
+});
+
+function requestOriginPermission() {
+  chrome.permissions.request({
+    origins: ["*://*.forumla.de/*"],
+  });
+
+  // Close the popup because it's above the permission request bubble in
+  // Firefox.
+  window.close();
+}
 </script>
 
 <template>
@@ -80,6 +98,12 @@ const commitHash = __COMMIT_HASH__;
       </template>
     </v-app-bar>
     <v-main>
+      <v-alert v-if="!originPermissionGranted" type="warning" class="ma-4">
+        <div class="d-flex flex-column" style="gap: 4px">
+          <span>Berechtigung zum Zugriff auf forumla.de erforderlich.</span>
+          <v-btn @click="requestOriginPermission">Erlauben</v-btn>
+        </div>
+      </v-alert>
       <v-window v-model="activeTab">
         <v-window-item value="layout">
           <TabLayout />
