@@ -1,3 +1,4 @@
+import "@fontsource/roboto";
 import { createPinia } from "pinia";
 import { createApp } from "vue";
 import { createVuetify } from "vuetify";
