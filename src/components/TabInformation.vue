@@ -44,6 +44,7 @@ const debugInfo = computed(() =>
     {
       userAgent: navigator.userAgent,
       version,
+      commitHash: __COMMIT_HASH__,
       storage: addonStore.storage,
     },
     null,
