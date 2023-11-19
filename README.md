@@ -1,5 +1,11 @@
 # Forumla Enhanced
 
+[![Available in the Chrome Web Store](https://storage.googleapis.com/web-dev-uploads/image/WlD8wC6g8khYWPJUsQceQkhXSlv1/tbyBjqi7Zu733AAKA5n4.png)](https://chromewebstore.google.com/detail/forumla-enhanced-beta/ilplcmogdmdceejlebllhjfigkamngig)
+[![Get the Add-On for Firefox](https://extensionworkshop.com/assets/img/documentation/publish/get-the-addon-178x60px.dad84b42.png)](https://addons.mozilla.org/en-US/firefox/addon/forumla-enhanced/)
+
+![](https://img.shields.io/chrome-web-store/v/ilplcmogdmdceejlebllhjfigkamngig)
+![](https://img.shields.io/amo/v/forumla-enhanced)
+
 Inoffizielles Browser Add-On für [forumla.de](https://forumla.de).
 
 ![Screenshot](./screenshot.png)
