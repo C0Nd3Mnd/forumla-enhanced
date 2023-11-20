@@ -50,7 +50,7 @@ const postImageHeightLimitOptions = [
     <FeatureToggle
       prop="hideSignatureImages"
       title="Signaturbilder ausblenden"
-      subtitle="Blendet sämtliche Bilder in Signaturen von Posts aus."
+      subtitle="Blendet sämtliche Bilder in Signaturen von Posts aus"
       lines="two"
     />
     <v-list-subheader>Einbettungen</v-list-subheader>
