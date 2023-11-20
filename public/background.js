@@ -127,6 +127,7 @@ chrome.runtime.onInstalled.addListener(async () => {
     fixStyleBugs: false,
     postImageHeightLimit: false,
     hideSignatureImages: false,
+    allowYouTubeFullscreen: false,
   };
 
   chrome.storage.sync.set({
@@ -334,6 +335,21 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
               }
             }
           });
+        }
+
+        if (storage.allowYouTubeFullscreen) {
+          for (const el of document.querySelectorAll("iframe")) {
+            if (!el.src.startsWith("https://www.youtube.com/")) {
+              continue;
+            }
+
+            // We need to clone the node and re-add it to the DOM because adding
+            // allowfullscreen has no effect retroactively.
+            const clone = el.cloneNode();
+            clone.allowFullscreen = true;
+            el.parentNode.insertBefore(clone, el);
+            el.remove();
+          }
         }
       })();
     },

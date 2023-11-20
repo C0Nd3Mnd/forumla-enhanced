@@ -53,5 +53,12 @@ const postImageHeightLimitOptions = [
       subtitle="Blendet sämtliche Bilder in Signaturen von Posts aus."
       lines="two"
     />
+    <v-list-subheader>Einbettungen</v-list-subheader>
+    <FeatureToggle
+      prop="allowYouTubeFullscreen"
+      title="Vollbild bei YouTube-Videos erlauben"
+      subtitle="Aktiviert den Vollbild-Button bei YouTube-Videos, um diese direkt im Forum im Vollbild anschauen zu können"
+      lines="three"
+    />
   </v-list>
 </template>
