@@ -338,6 +338,9 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
         }
 
         if (storage.allowYouTubeFullscreen) {
+          // This only affects elements available on initial render. It does not
+          // work on posts loaded afterwards, for example posts by blocked users
+          // that are loaded later on.
           for (const el of document.querySelectorAll("iframe")) {
             if (!el.src.startsWith("https://www.youtube.com/")) {
               continue;
@@ -349,6 +352,50 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
             clone.allowFullscreen = true;
             el.parentNode.insertBefore(clone, el);
             el.remove();
+          }
+
+          if (window.vB_AJAX_PostLoader) {
+            const ogDisplayFn = window.vB_AJAX_PostLoader.prototype.display;
+
+            window.vB_AJAX_PostLoader.prototype.display = function (B) {
+              if (B.responseXML) {
+                var C = B.responseXML.getElementsByTagName("postbit");
+                if (C.length) {
+                  var A = string_to_node(C[0].firstChild.nodeValue);
+
+                  console.log("A A A A A", A);
+
+                  for (const el of A.querySelectorAll("iframe")) {
+                    if (!el.src.startsWith("https://www.youtube.com/")) {
+                      continue;
+                    }
+
+                    el.allowFullscreen = true;
+                  }
+
+                  if (this.prefix) {
+                    container = this.post.getElementsByTagName("ol");
+                    container[0].innerHTML = "";
+                    container[0].appendChild(A);
+                  } else {
+                    this.post.parentNode.replaceChild(A, this.post);
+                  }
+                  PostBit_Init(A, this.postid);
+                } else {
+                  openWindow(
+                    "showthread.php?" +
+                      (SESSIONURL ? "s=" + SESSIONURL : "") +
+                      (pc_obj != null
+                        ? "&postcount=" + PHP.urlencode(pc_obj.name)
+                        : "") +
+                      "&p=" +
+                      this.postid +
+                      "#post" +
+                      this.postid,
+                  );
+                }
+              }
+            };
           }
         }
       })();
