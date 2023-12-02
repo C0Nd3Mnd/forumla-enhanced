@@ -113,6 +113,15 @@ html:has([href*="clientscript/vbulletin_css/style00068"]) .js-anim-snowflake {
 }`;
   }
 
+  if (storage.allowYouTubeFullscreen) {
+    css += `
+/* Override width/height of YouTube embeds to prevent scripts from changing it */
+iframe[title="YouTube video player"] {
+  width: 640px !IMPORTANT;
+  height: 390px !IMPORTANT;
+}`;
+  }
+
   return css;
 }
 
