@@ -55,6 +55,7 @@ const postImageHeightLimitOptions = [
     />
     <v-list-subheader>Einbettungen</v-list-subheader>
     <FeatureToggle
+      experimental
       prop="allowYouTubeFullscreen"
       title="Vollbild bei YouTube-Videos erlauben"
       subtitle="Aktiviert den Vollbild-Button bei YouTube-Videos, um diese direkt im Forum im Vollbild anschauen zu können"
