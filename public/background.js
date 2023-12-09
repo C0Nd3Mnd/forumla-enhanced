@@ -209,20 +209,22 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
     world: detectedBrowser === BROWSER_FIREFOX ? "ISOLATED" : "MAIN",
     func: function (storage) {
       (function () {
-        // We want to prevent custom scroll logic to stop weird page jumping
-        // behaviour with a fixed header (and otherwise).
-        const ogScrollIntoView = HTMLElement.prototype.scrollIntoView;
-        HTMLElement.prototype.scrollIntoView = function () {
-          if (this.classList.contains("postcontainer")) {
-            console.log("scrollIntoView prevented", this);
-            return;
-          }
+        function enhance() {
+          // We want to prevent custom scroll logic to stop weird page jumping
+          // behaviour with a fixed header (and otherwise).
+          //
+          // This doesn't work in the ISOLATED world.
+          const ogScrollIntoView = HTMLElement.prototype.scrollIntoView;
+          HTMLElement.prototype.scrollIntoView = function () {
+            if (this.classList.contains("postcontainer")) {
+              console.log("scrollIntoView prevented", this);
+              return;
+            }
 
-          return ogScrollIntoView.apply(this, arguments);
-        };
+            return ogScrollIntoView.apply(this, arguments);
+          };
 
-        if (storage.relativeTimestamps) {
-          document.addEventListener("DOMContentLoaded", () => {
+          if (storage.relativeTimestamps) {
             const TODAY_REGEXP = /Heute,\s(\d{2}):(\d{2})/;
             const YESTERDAY_REGEXP = /Gestern,\s(\d{2}):(\d{2})/;
             const DATE_REGEXP = /(\d{2})\.(\d{2})\.(\d{4}),\s(\d{2}):(\d{2})/;
@@ -321,11 +323,9 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
                 element.innerText = "Gerade eben";
               }
             }
-          });
-        }
+          }
 
-        if (storage.confirmSubscriptionDeletion) {
-          document.addEventListener("DOMContentLoaded", () => {
+          if (storage.confirmSubscriptionDeletion) {
             const unsubscribeLinks = document.querySelectorAll(
               "#new_subscribed_threads > ol > li .author a",
             );
@@ -343,101 +343,109 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
                 });
               }
             }
-          });
-        }
-
-        if (storage.allowYouTubeFullscreen) {
-          // This only affects elements available on initial render. It does not
-          // work on posts loaded afterwards, for example posts by blocked users
-          // that are loaded later on.
-
-          function replaceYouTubeFrames() {
-            const iframes = document.querySelectorAll("iframe");
-
-            console.log(`Found ${iframes.length} iframes.`, iframes);
-
-            for (const el of iframes) {
-              if (
-                !el.src.startsWith("https://www.youtube.com/") ||
-                el.allowFullscreen
-              ) {
-                continue;
-              }
-
-              // We need to clone the node and re-add it to the DOM because
-              // adding allowfullscreen has no effect retroactively.
-              const clone = el.cloneNode();
-              clone.allowFullscreen = true;
-              el.parentNode.insertBefore(clone, el);
-              el.remove();
-              console.log("Replaced YouTube player with", clone);
-            }
           }
 
-          // We attempt to replace YouTube iframes both instantly and after
-          // DOMContentLoaded is fired, because sometimes iframes don't exist
-          // instantly and sometimes DOMContentLoaded either doesn't fire (?).
-          // Not really sure what's happening here, hence why the feature is
-          // marked as experimental because this workaround is more of a hack
-          // rather than a proper solution.
-          //
-          // I assume that in some cases, DOMContentLoaded has already fired
-          // before this script has been executed. But I'll have to look into
-          // this further as it also affects other functionality.
+          if (storage.allowYouTubeFullscreen) {
+            // This only affects elements available on initial render. It does not
+            // work on posts loaded afterwards, for example posts by blocked users
+            // that are loaded later on.
 
-          replaceYouTubeFrames();
+            function replaceYouTubeFrames() {
+              const iframes = document.querySelectorAll("iframe");
 
-          document.addEventListener("DOMContentLoaded", () => {
+              console.log(`Found ${iframes.length} iframes.`, iframes);
+
+              for (const el of iframes) {
+                if (
+                  !el.src.startsWith("https://www.youtube.com/") ||
+                  el.allowFullscreen
+                ) {
+                  continue;
+                }
+
+                // We need to clone the node and re-add it to the DOM because
+                // adding allowfullscreen has no effect retroactively.
+                const clone = el.cloneNode();
+                clone.allowFullscreen = true;
+                el.parentNode.insertBefore(clone, el);
+                el.remove();
+                console.log("Replaced YouTube player with", clone);
+              }
+            }
+
+            // We attempt to replace YouTube iframes both instantly and after
+            // DOMContentLoaded is fired, because sometimes iframes don't exist
+            // instantly and sometimes DOMContentLoaded either doesn't fire (?).
+            // Not really sure what's happening here, hence why the feature is
+            // marked as experimental because this workaround is more of a hack
+            // rather than a proper solution.
+            //
+            // I assume that in some cases, DOMContentLoaded has already fired
+            // before this script has been executed. But I'll have to look into
+            // this further as it also affects other functionality.
+
             replaceYouTubeFrames();
-          });
 
-          if (window.vB_AJAX_PostLoader) {
-            // This overrides the default AJAX postloader to add code that
-            // replaces YouTube iframes with new iframes that have
-            // allowfullscreen enabled.
+            if (window.vB_AJAX_PostLoader) {
+              // This overrides the default AJAX postloader to add code that
+              // replaces YouTube iframes with new iframes that have
+              // allowfullscreen enabled.
+              //
+              // This doesn't work in the ISOLATED world.
 
-            window.vB_AJAX_PostLoader.prototype.display = function (B) {
-              if (B.responseXML) {
-                var C = B.responseXML.getElementsByTagName("postbit");
-                if (C.length) {
-                  var A = string_to_node(C[0].firstChild.nodeValue);
+              window.vB_AJAX_PostLoader.prototype.display = function (B) {
+                if (B.responseXML) {
+                  var C = B.responseXML.getElementsByTagName("postbit");
+                  if (C.length) {
+                    var A = string_to_node(C[0].firstChild.nodeValue);
 
-                  for (const el of A.querySelectorAll("iframe")) {
-                    if (!el.src.startsWith("https://www.youtube.com/")) {
-                      continue;
+                    for (const el of A.querySelectorAll("iframe")) {
+                      if (!el.src.startsWith("https://www.youtube.com/")) {
+                        continue;
+                      }
+
+                      el.allowFullscreen = true;
                     }
 
-                    el.allowFullscreen = true;
-                  }
-
-                  if (this.prefix) {
-                    container = this.post.getElementsByTagName("ol");
-                    container[0].innerHTML = "";
-                    container[0].appendChild(A);
+                    if (this.prefix) {
+                      container = this.post.getElementsByTagName("ol");
+                      container[0].innerHTML = "";
+                      container[0].appendChild(A);
+                    } else {
+                      this.post.parentNode.replaceChild(A, this.post);
+                    }
+                    console.log(
+                      "Replaced YouTube player in AJAX loaded post with",
+                      A,
+                    );
+                    PostBit_Init(A, this.postid);
                   } else {
-                    this.post.parentNode.replaceChild(A, this.post);
+                    openWindow(
+                      "showthread.php?" +
+                        (SESSIONURL ? "s=" + SESSIONURL : "") +
+                        (pc_obj != null
+                          ? "&postcount=" + PHP.urlencode(pc_obj.name)
+                          : "") +
+                        "&p=" +
+                        this.postid +
+                        "#post" +
+                        this.postid,
+                    );
                   }
-                  console.log(
-                    "Replaced YouTube player in AJAX loaded post with",
-                    A,
-                  );
-                  PostBit_Init(A, this.postid);
-                } else {
-                  openWindow(
-                    "showthread.php?" +
-                      (SESSIONURL ? "s=" + SESSIONURL : "") +
-                      (pc_obj != null
-                        ? "&postcount=" + PHP.urlencode(pc_obj.name)
-                        : "") +
-                      "&p=" +
-                      this.postid +
-                      "#post" +
-                      this.postid,
-                  );
                 }
-              }
-            };
+              };
+            }
           }
+        }
+
+        if (document.readyState === "loading") {
+          document.addEventListener("readystatechange", (event) => {
+            if (event.target.readyState === "interactive") {
+              enhance();
+            }
+          });
+        } else {
+          enhance();
         }
       })();
     },
