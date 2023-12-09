@@ -350,30 +350,23 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
             // work on posts loaded afterwards, for example posts by blocked users
             // that are loaded later on.
 
-            function replaceYouTubeFrames() {
-              const iframes = document.querySelectorAll("iframe");
+            const iframes = document.querySelectorAll("iframe");
 
-              console.log(`Found ${iframes.length} iframes.`, iframes);
-
-              for (const el of iframes) {
-                if (
-                  !el.src.startsWith("https://www.youtube.com/") ||
-                  el.allowFullscreen
-                ) {
-                  continue;
-                }
-
-                // We need to clone the node and re-add it to the DOM because
-                // adding allowfullscreen has no effect retroactively.
-                const clone = el.cloneNode();
-                clone.allowFullscreen = true;
-                el.parentNode.insertBefore(clone, el);
-                el.remove();
-                console.log("Replaced YouTube player with", clone);
+            for (const el of iframes) {
+              if (
+                !el.src.startsWith("https://www.youtube.com/") ||
+                el.allowFullscreen
+              ) {
+                continue;
               }
-            }
 
-            replaceYouTubeFrames();
+              // We need to clone the node and re-add it to the DOM because
+              // adding allowfullscreen has no effect retroactively.
+              const clone = el.cloneNode();
+              clone.allowFullscreen = true;
+              el.parentNode.insertBefore(clone, el);
+              el.remove();
+            }
 
             if (window.vB_AJAX_PostLoader) {
               // This overrides the default AJAX postloader to add code that
@@ -403,10 +396,6 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
                     } else {
                       this.post.parentNode.replaceChild(A, this.post);
                     }
-                    console.log(
-                      "Replaced YouTube player in AJAX loaded post with",
-                      A,
-                    );
                     PostBit_Init(A, this.postid);
                   } else {
                     openWindow(
