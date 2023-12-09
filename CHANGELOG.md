@@ -1,5 +1,13 @@
 # Changelog
 
+## v2.1.0 (2023-12-09)
+
+* Neue Einstellung, um den Vollbild-Modus bei eingebetteten YouTube-Videos zu erlauben
+  * Experimentell
+  * Funktioniert in Firefox nicht bei nachgeladenen Posts (beispielsweise wenn Posts blockierter User nachträglich angezeigt werden)
+* Der Commit Hash ist jetzt in den Debug-Informationen enthalten
+* Alle Teile des injizierten Scripts werden jetzt zuverlässiger ausgeführt (zuvor wurden Teile des Scripts je nach Seitenaufruf/Geschwindigkeit nicht immer ausgeführt)
+
 ## v2.0.2 (2023-11-19)
 
 * Berechtigung auf `*://*.forumla.de/*` wird erfragt, wenn der Zugriff nicht erlaubt ist
