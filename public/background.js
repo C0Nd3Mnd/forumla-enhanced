@@ -350,29 +350,57 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
           // This only affects elements available on initial render. It does not
           // work on posts loaded afterwards, for example posts by blocked users
           // that are loaded later on.
-          for (const el of document.querySelectorAll("iframe")) {
-            if (!el.src.startsWith("https://www.youtube.com/")) {
-              continue;
-            }
 
-            // We need to clone the node and re-add it to the DOM because adding
-            // allowfullscreen has no effect retroactively.
-            const clone = el.cloneNode();
-            clone.allowFullscreen = true;
-            el.parentNode.insertBefore(clone, el);
-            el.remove();
+          function replaceYouTubeFrames() {
+            const iframes = document.querySelectorAll("iframe");
+
+            console.log(`Found ${iframes.length} iframes.`, iframes);
+
+            for (const el of iframes) {
+              if (
+                !el.src.startsWith("https://www.youtube.com/") ||
+                el.allowFullscreen
+              ) {
+                continue;
+              }
+
+              // We need to clone the node and re-add it to the DOM because
+              // adding allowfullscreen has no effect retroactively.
+              const clone = el.cloneNode();
+              clone.allowFullscreen = true;
+              el.parentNode.insertBefore(clone, el);
+              el.remove();
+              console.log("Replaced YouTube player with", clone);
+            }
           }
 
+          // We attempt to replace YouTube iframes both instantly and after
+          // DOMContentLoaded is fired, because sometimes iframes don't exist
+          // instantly and sometimes DOMContentLoaded either doesn't fire (?).
+          // Not really sure what's happening here, hence why the feature is
+          // marked as experimental because this workaround is more of a hack
+          // rather than a proper solution.
+          //
+          // I assume that in some cases, DOMContentLoaded has already fired
+          // before this script has been executed. But I'll have to look into
+          // this further as it also affects other functionality.
+
+          replaceYouTubeFrames();
+
+          document.addEventListener("DOMContentLoaded", () => {
+            replaceYouTubeFrames();
+          });
+
           if (window.vB_AJAX_PostLoader) {
-            const ogDisplayFn = window.vB_AJAX_PostLoader.prototype.display;
+            // This overrides the default AJAX postloader to add code that
+            // replaces YouTube iframes with new iframes that have
+            // allowfullscreen enabled.
 
             window.vB_AJAX_PostLoader.prototype.display = function (B) {
               if (B.responseXML) {
                 var C = B.responseXML.getElementsByTagName("postbit");
                 if (C.length) {
                   var A = string_to_node(C[0].firstChild.nodeValue);
-
-                  console.log("A A A A A", A);
 
                   for (const el of A.querySelectorAll("iframe")) {
                     if (!el.src.startsWith("https://www.youtube.com/")) {
@@ -389,6 +417,10 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
                   } else {
                     this.post.parentNode.replaceChild(A, this.post);
                   }
+                  console.log(
+                    "Replaced YouTube player in AJAX loaded post with",
+                    A,
+                  );
                   PostBit_Init(A, this.postid);
                 } else {
                   openWindow(
