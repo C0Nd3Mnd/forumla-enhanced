@@ -373,17 +373,6 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
               }
             }
 
-            // We attempt to replace YouTube iframes both instantly and after
-            // DOMContentLoaded is fired, because sometimes iframes don't exist
-            // instantly and sometimes DOMContentLoaded either doesn't fire (?).
-            // Not really sure what's happening here, hence why the feature is
-            // marked as experimental because this workaround is more of a hack
-            // rather than a proper solution.
-            //
-            // I assume that in some cases, DOMContentLoaded has already fired
-            // before this script has been executed. But I'll have to look into
-            // this further as it also affects other functionality.
-
             replaceYouTubeFrames();
 
             if (window.vB_AJAX_PostLoader) {
